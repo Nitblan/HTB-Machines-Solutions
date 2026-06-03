@@ -51,25 +51,26 @@ Backdoor/
 
 Mantener un registro organizado de recursos obtenidos durante laboratorios y entornos de práctica de ciberseguridad.
 
-Este repositorio funciona como una biblioteca personal de referencia para futuras investigaciones, estudios y resolución de máquinas similares.
+Este repositorio funciona como una biblioteca personal de referencia para futuras investigaciones, estudios y resolución de máquinas similares, además de fungir como un impulso personal de hasta donde he llegado cuando me sienta que no progreso :))
 
 ---
 
 ## Entorno de Trabajo
 
-* Arch Linux
+* Arch Linux (La mayoria de herramientas son descargadas)
 * BSPWM
 * Kitty
 * Zsh
 * NvChad
 * Git
+* paru, yay
 
 ---
 
 ## Aviso
 
-Los archivos contenidos en este repositorio provienen exclusivamente de laboratorios y entornos controlados destinados al aprendizaje de seguridad informática.
+Los archivos contenidos en este repositorio provienen exclusivamente de laboratorios y entornos controlados destinados al aprendizaje de seguridad informática meidante la plataforma de Hack The Box y HTB VIP.
 
 Este repositorio tiene fines educativos y de documentación personal.
 
---Nitblan :))
+-- Nitblan :))
