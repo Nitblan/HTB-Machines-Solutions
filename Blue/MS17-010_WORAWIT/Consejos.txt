@@ -1,0 +1,6 @@
+UN simple consejo es en el checker, puede que ponga ok si no tiene ningun username, sin embargo hay casos en los cuales tienes que poner guest.
+El script funciona en python2
+Al poner username como guest ya aparece como Ok en todos ambitos
+
+
+
