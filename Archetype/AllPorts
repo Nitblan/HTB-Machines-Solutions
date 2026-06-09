@@ -1,0 +1,5 @@
+# Nmap 7.99 scan initiated Mon Jun  8 16:47:15 2026 as: nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn -sV -oG AllPorts 10.129.12.20
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.129.12.20 ()	Status: Up
+Host: 10.129.12.20 ()	Ports: 135/open/tcp//msrpc//Microsoft Windows RPC/, 139/open/tcp//netbios-ssn//Microsoft Windows netbios-ssn/, 445/open/tcp//microsoft-ds//Microsoft Windows Server 2008 R2 - 2012 microsoft-ds/, 1433/open/tcp//ms-sql-s//Microsoft SQL Server 2017 14.00.1000/, 5985/open/tcp//http//Microsoft HTTPAPI httpd 2.0 (SSDP|UPnP)/, 47001/open/tcp//http//Microsoft HTTPAPI httpd 2.0 (SSDP|UPnP)/, 49664/open/tcp//msrpc//Microsoft Windows RPC/, 49665/open/tcp//msrpc//Microsoft Windows RPC/, 49666/open/tcp//msrpc//Microsoft Windows RPC/, 49667/open/tcp//msrpc//Microsoft Windows RPC/, 49668/open/tcp//msrpc//Microsoft Windows RPC/, 49669/open/tcp//msrpc//Microsoft Windows RPC/
+# Nmap done at Mon Jun  8 16:48:28 2026 -- 1 IP address (1 host up) scanned in 72.86 seconds
