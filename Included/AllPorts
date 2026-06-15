@@ -1,0 +1,5 @@
+# Nmap 7.99 scan initiated Sun Jun 14 20:02:53 2026 as: nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn -sV -oG AllPorts 10.129.95.185
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.129.95.185 ()	Status: Up
+Host: 10.129.95.185 ()	Ports: 80/open/tcp//http//Apache httpd 2.4.29 ((Ubuntu))/
+# Nmap done at Sun Jun 14 20:03:20 2026 -- 1 IP address (1 host up) scanned in 27.25 seconds
