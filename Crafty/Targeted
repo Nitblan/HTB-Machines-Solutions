@@ -1,0 +1,15 @@
+# Nmap 7.991 scan initiated Sat Oct 10 14:24:24 2026 as: nmap -Pn -sVC -p80,25565 -oN Targeted 10.129.230.193
+Nmap scan report for crafty.htb (10.129.230.193)
+Host is up (0.075s latency).
+
+PORT      STATE SERVICE   VERSION
+80/tcp    open  http      Microsoft IIS httpd 10.0
+|_http-title: Crafty - Official Website
+|_http-server-header: Microsoft-IIS/10.0
+| http-methods: 
+|_  Potentially risky methods: TRACE
+25565/tcp open  minecraft Minecraft 1.16.5 (Protocol: 127, Message: Crafty Server, Users: 0/100)
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Oct 10 14:24:37 2026 -- 1 IP address (1 host up) scanned in 12.79 seconds

@@ -1,0 +1,5 @@
+# Nmap 7.991 scan initiated Sat Oct 10 14:21:30 2026 as: nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn -oG Allports 10.129.230.193
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.129.230.193 ()	Status: Up
+Host: 10.129.230.193 ()	Ports: 80/open/tcp//http///, 25565/open/tcp//minecraft///	Ignored State: filtered (65533)
+# Nmap done at Sat Oct 10 14:21:56 2026 -- 1 IP address (1 host up) scanned in 26.46 seconds
