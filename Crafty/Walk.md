@@ -178,7 +178,7 @@ public class demo {
 }
 ```
 
-Reference: [Log4Shell explained with a simple exploit](https://www.hackplayers.com/2021/12/ce-en-log4j-ce-log4shell-simple-exploit.html)
+Reference: [Log4Shell explained with a simple exploit](https://www.hackplayers.com/2021/12/ce-en-log4j-log4shell-simple-exploit.html)
 
 The key operation is:
 
