@@ -1,0 +1,25 @@
+# Nmap 7.992 scan initiated Mon Oct 19 11:43:40 2026 as: nmap -p80 -sCV -Pn -oN Targeted 10.129.95.233
+Nmap scan report for 10.129.95.233
+Host is up (0.071s latency).
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Microsoft IIS httpd 6.0
+|_http-title: Under Construction
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+| http-methods: 
+|_  Potentially risky methods: TRACE COPY PROPFIND SEARCH LOCK UNLOCK DELETE PUT MOVE MKCOL PROPPATCH
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+| http-webdav-scan: 
+|   Server Type: Microsoft-IIS/6.0
+|   Server Date: Mon, 19 Oct 2026 17:43:49 GMT
+|   WebDAV type: Unknown
+|   Public Options: OPTIONS, TRACE, GET, HEAD, DELETE, PUT, POST, COPY, MOVE, MKCOL, PROPFIND, PROPPATCH, LOCK, UNLOCK, SEARCH
+|_  Allowed Methods: OPTIONS, TRACE, GET, HEAD, COPY, PROPFIND, SEARCH, LOCK, UNLOCK
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Oct 19 11:43:53 2026 -- 1 IP address (1 host up) scanned in 13.12 seconds
