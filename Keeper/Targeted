@@ -1,0 +1,30 @@
+# Nmap 7.992 scan initiated Tue Oct 20 15:44:06 2026 as: nmap -sCV -Pn -vvv -p22,80 -oN Targeted 10.129.229.41
+Nmap scan report for tickets.keeper.htb (10.129.229.41)
+Host is up, received user-set (0.076s latency).
+Scanned at 2026-10-20 15:44:07 CST for 13s
+
+PORT   STATE SERVICE REASON  VERSION
+22/tcp open  ssh     syn-ack OpenSSH 8.9p1 Ubuntu 3ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   256 35:39:d4:39:40:4b:1f:61:86:dd:7c:37:bb:4b:98:9e (ECDSA)
+| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBKHZRUyrg9VQfKeHHT6CZwCwu9YkJosNSLvDmPM9EC0iMgHj7URNWV3LjJ00gWvduIq7MfXOxzbfPAqvm2ahzTc=
+|   256 1a:e9:72:be:8b:b1:05:d5:ef:fe:dd:80:d8:ef:c0:66 (ED25519)
+|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBe5w35/5klFq1zo5vISwwbYSVy1Zzy+K9ZCt0px+goO
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+80/tcp open  http    syn-ack nginx 1.18.0 (Ubuntu)
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-favicon: Unknown favicon MD5: CF60F068F7A5343704B608CCE387F31F
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_http-title: Login
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Oct 20 15:44:20 2026 -- 1 IP address (1 host up) scanned in 13.39 seconds
