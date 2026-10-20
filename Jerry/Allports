@@ -1,0 +1,5 @@
+# Nmap 7.992 scan initiated Mon Oct 19 21:46:29 2026 as: nmap -p- -sS --open --min-rate 5000 -vvv -n -Pn -oG Allports 10.129.136.9
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.129.136.9 ()	Status: Up
+Host: 10.129.136.9 ()	Ports: 8080/open/tcp//http-proxy///	Ignored State: filtered (65534)
+# Nmap done at Mon Oct 19 21:46:56 2026 -- 1 IP address (1 host up) scanned in 26.96 seconds
