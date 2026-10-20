@@ -1,0 +1,5 @@
+# Nmap 7.992 scan initiated Mon Oct 19 23:14:38 2026 as: nmap -p- -sS --open --min-rate 5000 -vvv -n -Pn -oG Allports 10.129.48.103
+# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
+Host: 10.129.48.103 ()	Status: Up
+Host: 10.129.48.103 ()	Ports: 80/open/tcp//http///, 135/open/tcp//msrpc///, 139/open/tcp//netbios-ssn///, 443/open/tcp//https///, 445/open/tcp//microsoft-ds///, 3306/open/tcp//mysql///, 5000/open/tcp//upnp///, 5040/open/tcp/////, 7680/open/tcp//pando-pub///, 49664/open/tcp/////, 49665/open/tcp/////, 49666/open/tcp/////, 49667/open/tcp/////, 49668/open/tcp/////, 49669/open/tcp/////, 49670/open/tcp/////
+# Nmap done at Mon Oct 19 23:14:55 2026 -- 1 IP address (1 host up) scanned in 17.95 seconds

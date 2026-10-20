@@ -1,0 +1,147 @@
+# Nmap 7.992 scan initiated Mon Oct 19 23:16:07 2026 as: nmap -sCV -Pn -vvv -p80,135,139,443,445,3306,5000,5040,7680,49664,49665,49666,49667,49668,49669,49670 -oN Targeted 10.129.48.103
+Nmap scan report for 10.129.48.103
+Host is up, received user-set (0.073s latency).
+Scanned at 2026-10-19 23:16:08 CST for 177s
+
+PORT      STATE SERVICE      REASON  VERSION
+80/tcp    open  http         syn-ack Apache httpd 2.4.46 ((Win64) OpenSSL/1.1.1j PHP/7.3.27)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-title: Voting System using PHP
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+135/tcp   open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+139/tcp   open  netbios-ssn  syn-ack Microsoft Windows netbios-ssn
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+443/tcp   open  ssl/http     syn-ack Apache httpd 2.4.46 (OpenSSL/1.1.1j PHP/7.3.27)
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_ssl-date: TLS randomness does not represent time
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+| ssl-cert: Subject: commonName=staging.love.htb/organizationName=ValentineCorp/stateOrProvinceName=m/countryName=in/emailAddress=roy@love.htb/localityName=norway/organizationalUnitName=love.htb
+| Issuer: commonName=staging.love.htb/organizationName=ValentineCorp/stateOrProvinceName=m/countryName=in/emailAddress=roy@love.htb/localityName=norway/organizationalUnitName=love.htb
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2021-01-18T14:00:16
+| Not valid after:  2022-01-18T14:00:16
+| MD5:     bff0 1add 5048 afc8 b3cf 7140 6e68 5ff6
+| SHA-1:   83ed 29c4 70f6 4036 a6f4 2d4d 4cf6 18a2 e9e4 96c2
+| SHA-256: ee6b 72d6 0b18 4154 b032 dda0 c62a a401 8456 76dd 0126 1f9d 2d97 26ac 0f59 a74e
+| -----BEGIN CERTIFICATE-----
+| MIIDozCCAosCFFhDHcnclWJmeuqOK/LQv3XDNEu4MA0GCSqGSIb3DQEBCwUAMIGN
+| MQswCQYDVQQGEwJpbjEKMAgGA1UECAwBbTEPMA0GA1UEBwwGbm9yd2F5MRYwFAYD
+| VQQKDA1WYWxlbnRpbmVDb3JwMREwDwYDVQQLDAhsb3ZlLmh0YjEZMBcGA1UEAwwQ
+| c3RhZ2luZy5sb3ZlLmh0YjEbMBkGCSqGSIb3DQEJARYMcm95QGxvdmUuaHRiMB4X
+| DTIxMDExODE0MDAxNloXDTIyMDExODE0MDAxNlowgY0xCzAJBgNVBAYTAmluMQow
+| CAYDVQQIDAFtMQ8wDQYDVQQHDAZub3J3YXkxFjAUBgNVBAoMDVZhbGVudGluZUNv
+| cnAxETAPBgNVBAsMCGxvdmUuaHRiMRkwFwYDVQQDDBBzdGFnaW5nLmxvdmUuaHRi
+| MRswGQYJKoZIhvcNAQkBFgxyb3lAbG92ZS5odGIwggEiMA0GCSqGSIb3DQEBAQUA
+| A4IBDwAwggEKAoIBAQDQlH1J/AwbEm2Hnh4Bizch08sUHlHg7vAMGEB14LPq9G20
+| PL/6QmYxJOWBPjBWWywNYK3cPIFY8yUmYlLBiVI0piRfaSj7wTLW3GFSPhrpmfz0
+| 0zJMKeyBOD0+1K9BxiUQNVyEnihsULZKLmZcF6LhOIhiONEL6mKKr2/mHLgfoR7U
+| vM7OmmywdLRgLfXN2Cgpkv7ciEARU0phRq2p1s4W9Hn3XEU8iVqgfFXs/ZNyX3r8
+| LtDiQUavwn2s+Hta0mslI0waTmyOsNrE4wgcdcF9kLK/9ttM1ugTJSQAQWbYo5LD
+| 2bVw7JidPhX8mELviftIv5W1LguCb3uVb6ipfShxAgMBAAEwDQYJKoZIhvcNAQEL
+| BQADggEBANB5x2U0QuQdc9niiW8XtGVqlUZOpmToxstBm4r0Djdqv/Z73I/qys0A
+| y7crcy9dRO7M80Dnvj0ReGxoWN/95ZA4GSL8TUfIfXbonrCKFiXOOuS8jCzC9LWE
+| nP4jUUlAOJv6uYDajoD3NfbhW8uBvopO+8nywbQdiffatKO35McSl7ukvIK+d7gz
+| oool/rMp/fQ40A1nxVHeLPOexyB3YJIMAhm4NexfJ2TKxs10C+lJcuOxt7MhOk0h
+| zSPL/pMbMouLTXnIsh4SdJEzEkNnuO69yQoN8XgjM7vHvZQIlzs1R5pk4WIgKHSZ
+| 0drwvFE50xML9h2wrGh7L9/CSbhIhO8=
+|_-----END CERTIFICATE-----
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_http-title: 403 Forbidden
+| tls-alpn: 
+|_  http/1.1
+445/tcp   open  microsoft-ds syn-ack Windows 10 Pro 19042 microsoft-ds (workgroup: WORKGROUP)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+3306/tcp  open  mysql        syn-ack MariaDB 10.3.24 or later (unauthorized)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+5000/tcp  open  http         syn-ack Apache httpd 2.4.46 (OpenSSL/1.1.1j PHP/7.3.27)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_http-title: 403 Forbidden
+5040/tcp  open  unknown      syn-ack
+|_skypev2-version: ERROR: Script execution failed (use -d to debug)
+|_rpc-grind: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+7680/tcp  open  pando-pub?   syn-ack
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpc-grind: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49664/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49665/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49666/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49667/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49668/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49669/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49670/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+Service Info: Hosts: www.example.com, LOVE, www.love.htb; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb-os-discovery: 
+|   OS: Windows 10 Pro 19042 (Windows 10 Pro 6.3)
+|   OS CPE: cpe:/o:microsoft:windows_10::-
+|   Computer name: Love
+|   NetBIOS computer name: LOVE\x00
+|   Workgroup: WORKGROUP\x00
+|_  System time: 2026-10-19T22:39:54-07:00
+| p2p-conficker: 
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 60961/tcp): CLEAN (Couldn't establish connection (ERROR))
+|   Check 2 (port 36432/tcp): CLEAN (Couldn't establish connection (ERROR))
+|   Check 3 (port 33046/udp): CLEAN (Couldn't receive bytes: ERROR)
+|   Check 4 (port 29272/udp): CLEAN (Couldn't receive bytes: TIMEOUT)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+| smb2-time: 
+|   date: 2026-10-20T05:39:50
+|_  start_date: N/A
+|_clock-skew: mean: 2h41m03s, deviation: 4h02m32s, median: 21m01s
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled but not required
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Oct 19 23:19:05 2026 -- 1 IP address (1 host up) scanned in 178.69 seconds
