@@ -1,0 +1,99 @@
+# Nmap 7.992 scan initiated Tue Oct 20 20:56:57 2026 as: nmap -sCV -Pn -vvv -p21,80,135,139,445,5985,47001,49664,49665,49666,49667,49668,49669 -oN Targeted 10.129.230.176
+Nmap scan report for 10.129.230.176
+Host is up, received user-set (0.074s latency).
+Scanned at 2026-10-20 20:56:58 CST for 66s
+
+PORT      STATE SERVICE      REASON  VERSION
+21/tcp    open  ftp          syn-ack Microsoft ftpd
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+| 02-03-19  12:18AM                 1024 .rnd
+| 02-25-19  10:15PM       <DIR>          inetpub
+| 07-16-16  09:18AM       <DIR>          PerfLogs
+| 02-25-19  10:56PM       <DIR>          Program Files
+| 02-03-19  12:28AM       <DIR>          Program Files (x86)
+| 02-03-19  08:08AM       <DIR>          Users
+|_11-10-23  10:20AM       <DIR>          Windows
+| ftp-syst: 
+|_  SYST: Windows_NT
+80/tcp    open  http         syn-ack Indy httpd 18.1.37.13946 (Paessler PRTG bandwidth monitor)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-title: Did not follow redirect to /index.htm
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_http-favicon: Unknown favicon MD5: 36B3EF286FA4BEFBB797A0966B456479
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+135/tcp   open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+139/tcp   open  netbios-ssn  syn-ack Microsoft Windows netbios-ssn
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+445/tcp   open  microsoft-ds syn-ack Microsoft Windows Server 2008 R2 - 2012 microsoft-ds
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+5985/tcp  open  http         syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-title: Not Found
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+47001/tcp open  http         syn-ack Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_http-title: Not Found
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+49664/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49665/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49666/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49667/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49668/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49669/tcp open  msrpc        syn-ack Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time: 
+|   date: 2026-10-21T02:57:59
+|_  start_date: 2026-10-21T02:54:14
+| smb-security-mode: 
+|   account_used: guest
+|   authentication_level: user
+|   challenge_response: supported
+|_  message_signing: disabled (dangerous, but default)
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled but not required
+| p2p-conficker: 
+|   Checking for Conficker.C or higher...
+|   Check 1 (port 13307/tcp): CLEAN (Couldn't establish connection (ERROR))
+|   Check 2 (port 17103/tcp): CLEAN (Couldn't establish connection (ERROR))
+|   Check 3 (port 17884/udp): CLEAN (Couldn't receive bytes: TIMEOUT)
+|   Check 4 (port 60158/udp): CLEAN (Couldn't receive bytes: ERROR)
+|_  0/4 checks are positive: Host is CLEAN or ports are blocked
+|_clock-skew: mean: 0s, deviation: 0s, median: -1s
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Tue Oct 20 20:58:04 2026 -- 1 IP address (1 host up) scanned in 66.89 seconds
