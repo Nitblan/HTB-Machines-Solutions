@@ -1,0 +1,68 @@
+[38;5;8m─────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+     [38;5;8m│ [0mFile: [1mTargeted[0m
+[38;5;8m─────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[38;5;8m   1[0m [38;5;8m│[0m [37m# Nmap 7.992 scan initiated Wed Oct 21 11:52:59 2026 as: nmap -sCV -Pn -vvv -p22,53,80,1427,32400,32469 -oN Targeted 10.129.74.31[0m
+[38;5;8m   2[0m [38;5;8m│[0m [37mNmap scan report for 10.129.74.31[0m
+[38;5;8m   3[0m [38;5;8m│[0m [37mHost is up, received user-set (0.073s latency).[0m
+[38;5;8m   4[0m [38;5;8m│[0m [37mScanned at 2026-10-21 11:53:00 CST for 16s[0m
+[38;5;8m   5[0m [38;5;8m│[0m 
+[38;5;8m   6[0m [38;5;8m│[0m [37mPORT      STATE SERVICE REASON  VERSION[0m
+[38;5;8m   7[0m [38;5;8m│[0m [37m22/tcp    open  ssh     syn-ack OpenSSH 6.7p1 Debian 5+deb8u3 (protocol 2.0)[0m
+[38;5;8m   8[0m [38;5;8m│[0m [37m| ssh-hostkey: [0m
+[38;5;8m   9[0m [38;5;8m│[0m [37m|   1024 aa:ef:5c:e0:8e:86:97:82:47:ff:4a:e5:40:18:90:c5 (DSA)[0m
+[38;5;8m  10[0m [38;5;8m│[0m [37m| ssh-dss AAAAB3NzaC1kc3MAAACBAJpzaaGcmwdVrkG//X5kr6m9em2hEu3SianCnerFwTGHgUHrRpR6iocVhd8gN21TPNTwFF47q8nUitupMBnvImwAs8NcjLVclPSdFJSWwTxbaBiXOqyjV5BcKty+s2N8I9n[0m
+[38;5;8m    [0m [38;5;8m│[0m [37meI2coRBtZDUwUiF/1gUAZIimeKOj2x39kcBpcpM6ZAAAAFQDwL9La/FPu1rEutE8yfdIgxTDDNQAAAIBJbfYW/IeOFHPiKBzHWiM8JTjhPCcvjIkNjKMMdS6uo00/JQH4VUUTscc/LTvYmQeLAyc7GYQ/AcLgoYFH[0m
+[38;5;8m    [0m [38;5;8m│[0m [37mm8hDgFVN2D4BQ7yGQT9dU4GAOp4/H1wHPKlAiBuDQMsyEk2s2J+60Rt+hUKCZfnxPOoD9l+VEWfZQYCTOBi3gOAotgAAAIBd6OWkakYL2e132lg6Z02202PIq9zvAx3tfViuU9CGStiIW4eH4qrhSMiUKrhbNeCzv[0m
+[38;5;8m    [0m [38;5;8m│[0m [37mdcw6pRWK41+vDiQrhV12/w6JSowf9KHxvoprAGiEg7GjyvidBr9Mzv1WajlU9BQO0Nc7poV2UzyMwLYLqzdjBJT28WUs3qYTxanaUrV9g==[0m
+[38;5;8m  11[0m [38;5;8m│[0m [37m|   2048 e8:c1:9d:c5:43:ab:fe:61:23:3b:d7:e4:af:9b:74:18 (RSA)[0m
+[38;5;8m  12[0m [38;5;8m│[0m [37m| ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpSoRAKB+cPR8bChDdajCIpf4p1zHfZyu2xnIkqRAgm6Dws2zcy+VAZriPDRUrht10GfsBLZtp/1PZpkUd2b1PKvN2YIg4SDtpvTrdwAM2uCgUrZdKRoFa+nd[0m
+[38;5;8m    [0m [38;5;8m│[0m [37m8REgkTg8JRYkSGQ/RxBZzb06JZhRSvLABFve3rEPVdwTf4mzzNuryV4DNctrAojjP4Sq7Msc24poQRG9AkeyS1h4zrZMbB0DQaKoyY3pss5FWJ+qa83XNsqjnKlKhSbjH17pBFhlfo/6bGkIE68vS5CQi9Phygke6[0m
+[38;5;8m    [0m [38;5;8m│[0m [37m/a39EP2pJp6WzT5KI3Yosex3Br85kbh/J8CVf4EDIRs5qismW+AZLeJUJHrj[0m
+[38;5;8m  13[0m [38;5;8m│[0m [37m|   256 b6:a0:78:38:d0:c8:10:94:8b:44:b2:ea:a0:17:42:2b (ECDSA)[0m
+[38;5;8m  14[0m [38;5;8m│[0m [37m| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCl89gWp+rA+2SLZzt3r7x+9sXFOCy9g3C9Yk1S21hT/VOmlqYys1fbAvqwoVvkpRvHRzbd5CxViOVih0TeW/bM[0m
+[38;5;8m    [0m [38;5;8m│[0m [37m=[0m
+[38;5;8m  15[0m [38;5;8m│[0m [37m|   256 4d:68:40:f7:20:c4:e5:52:80:7a:44:38:b8:a2:a7:52 (ED25519)[0m
+[38;5;8m  16[0m [38;5;8m│[0m [37m|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILvYtCvO/UREAhODuSsm7liSb9SZ8gLoZtn7P46SIDZL[0m
+[38;5;8m  17[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  18[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  19[0m [38;5;8m│[0m [37m53/tcp    open  domain  syn-ack dnsmasq 2.76[0m
+[38;5;8m  20[0m [38;5;8m│[0m [37m| dns-nsid: [0m
+[38;5;8m  21[0m [38;5;8m│[0m [37m|   bind.version: [0m
+[38;5;8m  22[0m [38;5;8m│[0m [37m|_    dnsmasq-2.76[0m
+[38;5;8m  23[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  24[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  25[0m [38;5;8m│[0m [37m80/tcp    open  http    syn-ack lighttpd 1.4.35[0m
+[38;5;8m  26[0m [38;5;8m│[0m [37m|_http-title: Site doesn't have a title (text/html; charset=UTF-8).[0m
+[38;5;8m  27[0m [38;5;8m│[0m [37m| http-methods: [0m
+[38;5;8m  28[0m [38;5;8m│[0m [37m|_  Supported Methods: OPTIONS GET HEAD POST[0m
+[38;5;8m  29[0m [38;5;8m│[0m [37m|_http-server-header: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  30[0m [38;5;8m│[0m [37m|_hnap-info: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  31[0m [38;5;8m│[0m [37m|_http-trane-info: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  32[0m [38;5;8m│[0m [37m|_https-redirect: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  33[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  34[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  35[0m [38;5;8m│[0m [37m1427/tcp  open  upnp    syn-ack Platinum UPnP 1.0.5.13 (UPnP/1.0 DLNADOC/1.50)[0m
+[38;5;8m  36[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  37[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  38[0m [38;5;8m│[0m [37m32400/tcp open  http    syn-ack Plex Media Server httpd[0m
+[38;5;8m  39[0m [38;5;8m│[0m [37m|_http-server-header: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  40[0m [38;5;8m│[0m [37m|_http-cors: HEAD GET POST PUT DELETE OPTIONS[0m
+[38;5;8m  41[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  42[0m [38;5;8m│[0m [37m|_hnap-info: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  43[0m [38;5;8m│[0m [37m|_http-trane-info: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  44[0m [38;5;8m│[0m [37m| http-auth: [0m
+[38;5;8m  45[0m [38;5;8m│[0m [37m| HTTP/1.1 401 Unauthorized\x0D[0m
+[38;5;8m  46[0m [38;5;8m│[0m [37m|_  Server returned status 401 but no WWW-Authenticate header.[0m
+[38;5;8m  47[0m [38;5;8m│[0m [37m|_https-redirect: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  48[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  49[0m [38;5;8m│[0m [37m|_http-favicon: Plex[0m
+[38;5;8m  50[0m [38;5;8m│[0m [37m|_http-title: Unauthorized[0m
+[38;5;8m  51[0m [38;5;8m│[0m [37m32469/tcp open  upnp    syn-ack Platinum UPnP 1.0.5.13 (UPnP/1.0 DLNADOC/1.50)[0m
+[38;5;8m  52[0m [38;5;8m│[0m [37m|_vmware-version: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  53[0m [38;5;8m│[0m [37m|_rpcinfo: ERROR: Script execution failed (use -d to debug)[0m
+[38;5;8m  54[0m [38;5;8m│[0m [37mService Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel[0m
+[38;5;8m  55[0m [38;5;8m│[0m 
+[38;5;8m  56[0m [38;5;8m│[0m [37mRead data files from: /usr/bin/../share/nmap[0m
+[38;5;8m  57[0m [38;5;8m│[0m [37mService detection performed. Please report any incorrect results at https://nmap.org/submit/ .[0m
+[38;5;8m  58[0m [38;5;8m│[0m [37m# Nmap done at Wed Oct 21 11:53:17 2026 -- 1 IP address (1 host up) scanned in 17.48 seconds[0m
+[38;5;8m─────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
