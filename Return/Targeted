@@ -1,0 +1,114 @@
+# Nmap 7.992 scan initiated Sat Oct 24 00:57:59 2026 as: nmap -sCV -Pn -p53,80,88,135,139,389,445,464,593,636,3268,3269,5985,9389,47001,49664,49665,49666,49667,49671,49674,49675,49676,49679,49697 -oN Targeted 10.129.75.48
+Nmap scan report for 10.129.75.48
+Host is up (0.13s latency).
+
+PORT      STATE SERVICE       VERSION
+53/tcp    open  domain        Simple DNS Plus
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+80/tcp    open  http          Microsoft IIS httpd 10.0
+|_http-title: HTB Printer Admin Panel
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+| http-methods: 
+|_  Potentially risky methods: TRACE
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2026-10-24 07:16:41Z)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+135/tcp   open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+389/tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: return.local, Site: Default-First-Site-Name)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+445/tcp   open  microsoft-ds?
+|_rpc-grind: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+464/tcp   open  kpasswd5?
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_rpc-grind: ERROR: Script execution failed (use -d to debug)
+593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+636/tcp   open  tcpwrapped
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_jdwp-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: return.local, Site: Default-First-Site-Name)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+3269/tcp  open  tcpwrapped
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_jdwp-version: ERROR: Script execution failed (use -d to debug)
+5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-title: Not Found
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+9389/tcp  open  mc-nmf        .NET Message Framing
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-title: Not Found
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49664/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49665/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49666/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49667/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49671/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49674/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49675/tcp open  msrpc         Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+49676/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49679/tcp open  msrpc         Microsoft Windows RPC
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+49697/tcp open  msrpc         Microsoft Windows RPC
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+Service Info: Host: PRINTER; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time: 
+|   date: 2026-10-24T07:17:41
+|_  start_date: N/A
+|_clock-skew: 18m34s
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled and required
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Oct 24 00:59:18 2026 -- 1 IP address (1 host up) scanned in 78.88 seconds
