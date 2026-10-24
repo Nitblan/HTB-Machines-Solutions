@@ -1,0 +1,23 @@
+# Nmap 7.992 scan initiated Sat Oct 24 01:49:22 2026 as: nmap -sCV -Pn -p22,80 -oN Targeted 10.129.75.54
+Nmap scan report for permx.htb (10.129.75.54)
+Host is up (0.12s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.9p1 Ubuntu 3ubuntu0.10 (Ubuntu Linux; protocol 2.0)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+| ssh-hostkey: 
+|   256 e2:5c:5d:8c:47:3e:d8:72:f7:b4:80:03:49:86:6d:ef (ECDSA)
+|_  256 1f:41:02:8e:6b:17:18:9c:a0:ac:54:23:e9:71:30:17 (ED25519)
+80/tcp open  http    Apache httpd 2.4.52
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_http-title: eLEARNING
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+Service Info: Host: 127.0.1.1; OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sat Oct 24 01:49:32 2026 -- 1 IP address (1 host up) scanned in 9.75 seconds
