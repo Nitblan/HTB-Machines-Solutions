@@ -1,0 +1,17 @@
+# Nmap 7.992 scan initiated Wed Oct 28 14:25:03 2026 as: nmap -sCV -Pn -p80 -oN Targeted 10.129.136.28
+Nmap scan report for pressed.htb (10.129.136.28)
+Host is up (0.35s latency).
+
+PORT   STATE SERVICE VERSION
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-title: UHC Jan Finals &#8211; New Month, New Boxes
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+|_http-generator: WordPress 5.9
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Oct 28 14:25:16 2026 -- 1 IP address (1 host up) scanned in 13.53 seconds
