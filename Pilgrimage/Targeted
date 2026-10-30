@@ -1,0 +1,33 @@
+# Nmap 7.992 scan initiated Thu Oct 29 20:37:38 2026 as: nmap -sCV -Pn -p22,80 -oN Targeted 10.129.77.154
+Nmap scan report for pilgrimage.htb (10.129.77.154)
+Host is up (0.071s latency).
+
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.4p1 Debian 5+deb11u1 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 20:be:60:d2:95:f6:28:c1:b7:e9:e8:17:06:f1:68:f3 (RSA)
+|   256 0e:b6:a6:a8:c9:9b:41:73:74:6e:70:18:0d:5f:e0:af (ECDSA)
+|_  256 d1:4e:29:3c:70:86:69:b4:d7:2c:c8:0b:48:6e:98:04 (ED25519)
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+80/tcp open  http    nginx 1.18.0
+|_rpcinfo: ERROR: Script execution failed (use -d to debug)
+|_hnap-info: ERROR: Script execution failed (use -d to debug)
+|_http-trane-info: ERROR: Script execution failed (use -d to debug)
+|_https-redirect: ERROR: Script execution failed (use -d to debug)
+|_http-server-header: ERROR: Script execution failed (use -d to debug)
+| http-git: 
+|   10.129.77.154:80/.git/
+|     Git repository found!
+|     Repository description: Unnamed repository; edit this file 'description' to name the...
+|_    Last commit message: Pilgrimage image shrinking service initial commit. # Please ...
+|_vmware-version: ERROR: Script execution failed (use -d to debug)
+|_http-title: Pilgrimage - Shrink Your Images
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Thu Oct 29 20:37:47 2026 -- 1 IP address (1 host up) scanned in 9.05 seconds
