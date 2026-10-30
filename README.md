@@ -25,10 +25,11 @@ Los contenidos pueden incluir:
 ```text
 HTB-Machines-Solutions/
 │
+├── Alert/
+├── Antique/
+├── Archetype/
 ├── Arctic/
 ├── Backdoor/
-├── Funnel/
-├── Forest/
 └── ...
 ```
 
@@ -38,11 +39,11 @@ Ejemplo:
 
 ```text
 Backdoor/
-├── wp-config.php
-├── exploit.py
-├── rev.bin
+├── 50539.py
+├── bruteforce.py
 ├── passwd
-└── notas.txt
+├── rev.bin
+└── wp-config.php
 ```
 
 ---
@@ -57,7 +58,7 @@ Este repositorio funciona como una biblioteca personal de referencia para futura
 
 ## Entorno de Trabajo
 
-* Arch Linux (La mayoria de herramientas son descargadas)
+* Arch Linux (La mayoría de herramientas son descargadas)
 * BSPWM
 * Kitty
 * Zsh
@@ -69,7 +70,7 @@ Este repositorio funciona como una biblioteca personal de referencia para futura
 
 ## Aviso
 
-Los archivos contenidos en este repositorio provienen exclusivamente de laboratorios y entornos controlados destinados al aprendizaje de seguridad informática meidante la plataforma de Hack The Box y HTB VIP.
+Los archivos contenidos en este repositorio provienen exclusivamente de laboratorios y entornos controlados destinados al aprendizaje de seguridad informática mediante la plataforma de Hack The Box y HTB VIP.
 
 Este repositorio tiene fines educativos y de documentación personal.
 
