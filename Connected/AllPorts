@@ -1,5 +1,0 @@
-# Nmap 7.99 scan initiated Tue Jun  9 14:03:56 2026 as: nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn -sV -oG AllPorts 10.129.10.202
-# Ports scanned: TCP(65535;1-65535) UDP(0;) SCTP(0;) PROTOCOLS(0;)
-Host: 10.129.10.202 ()	Status: Up
-Host: 10.129.10.202 ()	Ports: 22/open/tcp//ssh//OpenSSH 7.4 (protocol 2.0)/, 80/open/tcp//http//Apache httpd 2.4.6 ((CentOS) OpenSSL|1.0.2k-fips PHP|7.4.16)/, 443/open/tcp//ssl|https//Apache|2.4.6 (CentOS) OpenSSL|1.0.2k-fips PHP|7.4.16/	Ignored State: filtered (65532)
-# Nmap done at Tue Jun  9 14:06:17 2026 -- 1 IP address (1 host up) scanned in 141.20 seconds
