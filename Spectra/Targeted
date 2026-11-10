@@ -1,0 +1,15 @@
+# Nmap 7.993 scan initiated Mon Nov  9 19:56:38 2026 as: nmap -sCV -Pn -p22,80,3306 -oN Targeted 10.129.81.253
+Nmap scan report for 10.129.81.253
+Host is up (0.078s latency).
+
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.1 (protocol 2.0)
+| ssh-hostkey: 
+|_  4096 52:47:de:5c:37:4f:29:0e:8e:1d:88:6e:f9:23:4d:5a (RSA)
+80/tcp   open  http    nginx 1.17.4
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: nginx/1.17.4
+3306/tcp open  mysql   MySQL (unauthorized)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Mon Nov  9 19:57:18 2026 -- 1 IP address (1 host up) scanned in 39.67 seconds
