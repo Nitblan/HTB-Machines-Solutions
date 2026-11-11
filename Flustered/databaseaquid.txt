@@ -1,0 +1,12 @@
+PRIMARY
+InnoDB
+user
+password
+enabled
+fullname
+comment
+infimum
+supremum
+lance.friedman
+o>WJ5-jD<5^m3
+Lance Friedman
